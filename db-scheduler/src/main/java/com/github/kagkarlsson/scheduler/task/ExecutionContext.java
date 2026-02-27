@@ -23,6 +23,7 @@ public class ExecutionContext {
   private final Execution execution;
   private final SchedulerClient schedulerClient;
   private CurrentlyExecuting currentlyExecuting;
+  private final ExecutionLogger executionLogger;
 
   public ExecutionContext(
       SchedulerState schedulerState,
@@ -33,6 +34,20 @@ public class ExecutionContext {
     this.execution = execution;
     this.schedulerClient = schedulerClient;
     this.currentlyExecuting = currentlyExecuting;
+    this.executionLogger = new ExecutionLogger.NoOp();
+  }
+
+  public ExecutionContext(
+      SchedulerState schedulerState,
+      Execution execution,
+      SchedulerClient schedulerClient,
+      CurrentlyExecuting currentlyExecuting,
+      ExecutionLogger executionLogger) {
+    this.schedulerState = schedulerState;
+    this.execution = execution;
+    this.schedulerClient = schedulerClient;
+    this.currentlyExecuting = currentlyExecuting;
+    this.executionLogger = executionLogger;
   }
 
   public SchedulerState getSchedulerState() {
@@ -53,5 +68,9 @@ public class ExecutionContext {
 
   public CurrentlyExecuting getCurrentlyExecuting() {
     return currentlyExecuting;
+  }
+
+  public ExecutionLogger getLogger() {
+    return executionLogger;
   }
 }
