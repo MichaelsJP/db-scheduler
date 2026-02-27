@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.github.kagkarlsson</groupId>
+  <groupId>com.github.MichaelsJP</groupId>
   <artifactId>db-scheduler-parent</artifactId>
-  <version>master-SNAPSHOT</version>
+  <version>main-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>db-scheduler: Parent</name>
@@ -202,12 +202,12 @@
             </filters>
             <relocations>
               <relocation>
-                <pattern>com.github.kagkarlsson.jdbc</pattern>
-                <shadedPattern>com.github.kagkarlsson.shaded.jdbc</shadedPattern>
+                <pattern>com.github.MichaelsJP.jdbc</pattern>
+                <shadedPattern>com.github.MichaelsJP.shaded.jdbc</shadedPattern>
               </relocation>
               <relocation>
                 <pattern>com.cronutils</pattern>
-                <shadedPattern>com.github.kagkarlsson.shaded.cronutils</shadedPattern>
+                <shadedPattern>com.github.MichaelsJP.shaded.cronutils</shadedPattern>
               </relocation>
             </relocations>
           </configuration>

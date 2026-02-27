@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.github.kagkarlsson</groupId>
+    <groupId>com.github.MichaelsJP</groupId>
     <artifactId>db-scheduler-parent</artifactId>
-    <version>master-SNAPSHOT</version>
+    <version>main-SNAPSHOT</version>
   </parent>
 
   <artifactId>db-scheduler</artifactId>
@@ -345,7 +345,7 @@
           <transformers>
             <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
               <manifestEntries>
-                <Automatic-Module-Name>com.github.kagkarlsson.scheduler</Automatic-Module-Name>
+                <Automatic-Module-Name>com.github.MichaelsJP.scheduler</Automatic-Module-Name>
               </manifestEntries>
             </transformer>
           </transformers>
