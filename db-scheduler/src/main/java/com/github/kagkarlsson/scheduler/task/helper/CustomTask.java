@@ -56,7 +56,19 @@ public abstract class CustomTask<T> extends AbstractTask<T> implements OnStartup
       FailureHandler<T> failureHandler,
       DeadExecutionHandler<T> deadExecutionHandler,
       int defaultPriority) {
-    super(name, dataClass, failureHandler, deadExecutionHandler, defaultPriority);
+    this(name, dataClass, scheduleOnStartup, defaultExecutionTime, failureHandler, deadExecutionHandler, defaultPriority, java.util.Collections.emptyList());
+  }
+
+  public CustomTask(
+      String name,
+      Class<T> dataClass,
+      ScheduleOnStartup<T> scheduleOnStartup,
+      Function<Instant, Instant> defaultExecutionTime,
+      FailureHandler<T> failureHandler,
+      DeadExecutionHandler<T> deadExecutionHandler,
+      int defaultPriority,
+      java.util.List<String> tags) {
+    super(name, dataClass, failureHandler, deadExecutionHandler, defaultPriority, tags);
     this.scheduleOnStartup = scheduleOnStartup;
     this.defaultExecutionTime = NextExecutionTime.from(defaultExecutionTime);
   }

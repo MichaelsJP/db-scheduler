@@ -37,6 +37,8 @@ public interface Task<T> extends ExecutionHandler<T>, HasTaskName {
 
   DeadExecutionHandler<T> getDeadExecutionHandler();
 
+  java.util.List<String> getTags();
+
   @Override
   default String getTaskName() {
     return getName();

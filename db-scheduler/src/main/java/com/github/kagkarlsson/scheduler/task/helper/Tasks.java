@@ -80,6 +80,7 @@ public class Tasks {
     private DeadExecutionHandler<T> onDeadExecution;
     private ScheduleRecurringOnStartup<T> scheduleOnStartup;
     private int defaultPriority = RecurringTask.DEFAULT_PRIORITY;
+    private java.util.List<String> tags = java.util.Collections.emptyList();
 
     public RecurringTaskBuilder(String name, Schedule schedule, Class<T> dataClass) {
       this.name = name;
@@ -122,6 +123,11 @@ public class Tasks {
       return this;
     }
 
+    public RecurringTaskBuilder<T> tags(java.util.List<String> tags) {
+      this.tags = tags;
+      return this;
+    }
+
     /**
      * Disable 'scheduleOnStartup' to get control over when and show the executions is scheduled.
      * Schedules will not be updated etc, so not really recommended.
@@ -145,7 +151,8 @@ public class Tasks {
           scheduleOnStartup,
           onFailure,
           onDeadExecution,
-          defaultPriority) {
+          defaultPriority,
+          tags) {
 
         @Override
         public void executeRecurringly(
@@ -163,7 +170,8 @@ public class Tasks {
           scheduleOnStartup,
           onFailure,
           onDeadExecution,
-          defaultPriority) {
+          defaultPriority,
+          tags) {
 
         @Override
         public CompletionHandler<T> execute(
@@ -190,6 +198,7 @@ public class Tasks {
         new DeadExecutionHandler.ReviveDeadExecution<>();
 
     private int defaultPriority = RecurringTaskWithPersistentSchedule.DEFAULT_PRIORITY;
+    private java.util.List<String> tags = java.util.Collections.emptyList();
 
     public RecurringTaskWithPersistentScheduleBuilder(String name, Class<T> dataClass) {
       this.name = name;
@@ -198,6 +207,11 @@ public class Tasks {
 
     public RecurringTaskWithPersistentScheduleBuilder<T> defaultPriority(int priority) {
       this.defaultPriority = priority;
+      return this;
+    }
+
+    public RecurringTaskWithPersistentScheduleBuilder<T> tags(java.util.List<String> tags) {
+      this.tags = tags;
       return this;
     }
 
@@ -221,7 +235,7 @@ public class Tasks {
     public RecurringTaskWithPersistentSchedule<T> execute(
         VoidExecutionHandler<T> executionHandler) {
       return new RecurringTaskWithPersistentSchedule<>(
-          name, dataClass, onFailure, onDeadExecution, defaultPriority) {
+          name, dataClass, onFailure, onDeadExecution, defaultPriority, tags) {
         @Override
         public CompletionHandler<T> execute(
             TaskInstance<T> taskInstance, ExecutionContext executionContext) {
@@ -239,7 +253,7 @@ public class Tasks {
     public RecurringTaskWithPersistentSchedule<T> executeStateful(
         StateReturningExecutionHandler<T> executionHandler) {
       return new RecurringTaskWithPersistentSchedule<>(
-          name, dataClass, onFailure, defaultPriority) {
+          name, dataClass, onFailure, onDeadExecution, defaultPriority, tags) {
 
         @Override
         public CompletionHandler<T> execute(
@@ -263,6 +277,7 @@ public class Tasks {
     private FailureHandler<T> onFailure;
     private DeadExecutionHandler<T> onDeadExecution;
     private int defaultPriority = OneTimeTask.DEFAULT_PRIORITY;
+    private java.util.List<String> tags = java.util.Collections.emptyList();
 
     public OneTimeTaskBuilder(String name, Class<T> dataClass) {
       this.name = name;
@@ -296,8 +311,13 @@ public class Tasks {
       return this;
     }
 
+    public OneTimeTaskBuilder<T> tags(java.util.List<String> tags) {
+      this.tags = tags;
+      return this;
+    }
+
     public OneTimeTask<T> execute(VoidExecutionHandler<T> executionHandler) {
-      return new OneTimeTask<>(name, dataClass, onFailure, onDeadExecution, defaultPriority) {
+      return new OneTimeTask<>(name, dataClass, onFailure, onDeadExecution, defaultPriority, tags) {
         @Override
         public void executeOnce(TaskInstance<T> taskInstance, ExecutionContext executionContext) {
           executionHandler.execute(taskInstance, executionContext);
@@ -314,6 +334,7 @@ public class Tasks {
     private ScheduleOnStartup<T> onStartup;
     private Function<Instant, Instant> defaultExecutionTime = Function.identity();
     private int defaultPriority = CustomTask.DEFAULT_PRIORITY;
+    private java.util.List<String> tags = java.util.Collections.emptyList();
 
     public TaskBuilder(String name, Class<T> dataClass) {
       this.name = name;
@@ -347,6 +368,11 @@ public class Tasks {
       return this;
     }
 
+    public TaskBuilder<T> tags(java.util.List<String> tags) {
+      this.tags = tags;
+      return this;
+    }
+
     public TaskBuilder<T> scheduleOnStartup(
         String instance, T initialData, Function<Instant, Instant> firstExecutionTime) {
       this.onStartup = new ScheduleOnceOnStartup<T>(instance, initialData, firstExecutionTime);
@@ -375,7 +401,8 @@ public class Tasks {
           defaultExecutionTime,
           onFailure,
           onDeadExecution,
-          defaultPriority) {
+          defaultPriority,
+          tags) {
         @Override
         public CompletionHandler<T> execute(
             TaskInstance<T> taskInstance, ExecutionContext executionContext) {

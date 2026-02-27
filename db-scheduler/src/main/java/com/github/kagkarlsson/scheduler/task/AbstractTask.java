@@ -23,13 +23,14 @@ public abstract class AbstractTask<T> implements Task<T> {
   private final Class<T> dataClass;
 
   private final int defaultPriority;
+  private final java.util.List<String> tags;
 
   public AbstractTask(
       String name,
       Class<T> dataClass,
       FailureHandler<T> failureHandler,
       DeadExecutionHandler<T> deadExecutionHandler) {
-    this(name, dataClass, failureHandler, deadExecutionHandler, DEFAULT_PRIORITY);
+    this(name, dataClass, failureHandler, deadExecutionHandler, DEFAULT_PRIORITY, java.util.Collections.emptyList());
   }
 
   public AbstractTask(
@@ -37,17 +38,24 @@ public abstract class AbstractTask<T> implements Task<T> {
       Class<T> dataClass,
       FailureHandler<T> failureHandler,
       DeadExecutionHandler<T> deadExecutionHandler,
-      int defaultPriority) {
+      int defaultPriority,
+      java.util.List<String> tags) {
     this.name = name;
     this.dataClass = dataClass;
     this.failureHandler = failureHandler;
     this.deadExecutionHandler = deadExecutionHandler;
     this.defaultPriority = defaultPriority;
+    this.tags = tags;
   }
 
   @Override
   public int getDefaultPriority() {
     return defaultPriority;
+  }
+
+  @Override
+  public java.util.List<String> getTags() {
+    return tags;
   }
 
   @Override
@@ -72,7 +80,7 @@ public abstract class AbstractTask<T> implements Task<T> {
 
   @Override
   public TaskInstance.Builder<T> instanceBuilder(String id) {
-    return new Builder<T>(this.name, id).priority(getDefaultPriority());
+    return new Builder<T>(this.name, id).priority(getDefaultPriority()).tags(getTags());
   }
 
   @Override

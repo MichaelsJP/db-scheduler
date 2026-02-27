@@ -50,7 +50,17 @@ public abstract class RecurringTaskWithPersistentSchedule<T extends ScheduleAndD
       FailureHandler<T> onFailure,
       DeadExecutionHandler<T> deadExecutionHandler,
       int defaultPriority) {
-    super(name, dataClass, onFailure, deadExecutionHandler, defaultPriority);
+    this(name, dataClass, onFailure, deadExecutionHandler, defaultPriority, java.util.Collections.emptyList());
+  }
+
+  public RecurringTaskWithPersistentSchedule(
+      String name,
+      Class<T> dataClass,
+      FailureHandler<T> onFailure,
+      DeadExecutionHandler<T> deadExecutionHandler,
+      int defaultPriority,
+      java.util.List<String> tags) {
+    super(name, dataClass, onFailure, deadExecutionHandler, defaultPriority, tags);
   }
 
   @Override

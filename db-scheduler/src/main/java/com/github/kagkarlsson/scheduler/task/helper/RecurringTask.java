@@ -84,7 +84,19 @@ public abstract class RecurringTask<T> extends AbstractTask<T> implements OnStar
       FailureHandler<T> failureHandler,
       DeadExecutionHandler<T> deadExecutionHandler,
       int defaultPriority) {
-    super(name, dataClass, failureHandler, deadExecutionHandler, defaultPriority);
+    this(name, schedule, dataClass, scheduleOnStartup, failureHandler, deadExecutionHandler, defaultPriority, java.util.Collections.emptyList());
+  }
+
+  public RecurringTask(
+      String name,
+      Schedule schedule,
+      Class<T> dataClass,
+      ScheduleRecurringOnStartup<T> scheduleOnStartup,
+      FailureHandler<T> failureHandler,
+      DeadExecutionHandler<T> deadExecutionHandler,
+      int defaultPriority,
+      java.util.List<String> tags) {
+    super(name, dataClass, failureHandler, deadExecutionHandler, defaultPriority, tags);
     onComplete = new OnCompleteReschedule<>(schedule);
     this.schedule = schedule;
     this.scheduleOnStartup = scheduleOnStartup;
@@ -93,13 +105,13 @@ public abstract class RecurringTask<T> extends AbstractTask<T> implements OnStar
   @Override
   public SchedulableInstance<T> schedulableInstance(String id) {
     return new SchedulableTaskInstance<>(
-        new TaskInstance<>(getName(), id), schedule::getInitialExecutionTime);
+        new TaskInstance<>(getName(), id, () -> null, getDefaultPriority(), getTags()), schedule::getInitialExecutionTime);
   }
 
   @Override
   public SchedulableInstance<T> schedulableInstance(String id, T data) {
     return new SchedulableTaskInstance<>(
-        new TaskInstance<>(getName(), id, data), schedule::getInitialExecutionTime);
+        new TaskInstance<>(getName(), id, () -> data, getDefaultPriority(), getTags()), schedule::getInitialExecutionTime);
   }
 
   @Override
