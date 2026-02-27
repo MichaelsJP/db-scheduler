@@ -13,7 +13,7 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
           cache: 'maven'
 
@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        spring-boot: [ '4.0.1' ]
+        spring-boot: [ '4.0.3' ]
     name: Spring Boot 4 - ${{ matrix.spring-boot }}
     steps:
       - uses: actions/checkout@v3
@@ -34,7 +34,7 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
           cache: 'maven'
 
