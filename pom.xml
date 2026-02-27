@@ -80,6 +80,10 @@
     <pluginRepository>
       <id>jitpack.io</id>
       <url>https://jitpack.io</url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
     </pluginRepository>
   </pluginRepositories>
 
@@ -87,6 +91,10 @@
     <repository>
       <id>jitpack.io</id>
       <url>https://jitpack.io</url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
     </repository>
   </repositories>
 
