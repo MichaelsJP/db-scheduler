@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.github.MichaelsJP</groupId>
+    <groupId>com.github.MichaelsJP.db-scheduler</groupId>
     <artifactId>db-scheduler-parent</artifactId>
     <version>main-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
@@ -28,12 +28,12 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.github.MichaelsJP</groupId>
+        <groupId>com.github.MichaelsJP.db-scheduler</groupId>
         <artifactId>db-scheduler</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.github.MichaelsJP</groupId>
+        <groupId>com.github.MichaelsJP.db-scheduler</groupId>
         <artifactId>db-scheduler-spring-common</artifactId>
         <version>${project.version}</version>
       </dependency>

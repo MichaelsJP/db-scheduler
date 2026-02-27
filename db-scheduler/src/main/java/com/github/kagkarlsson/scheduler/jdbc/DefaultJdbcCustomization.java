@@ -74,7 +74,7 @@ public class DefaultJdbcCustomization implements JdbcCustomization {
 
   @Override
   public void setTags(PreparedStatement p, int index, List<String> tags) throws SQLException {
-    // Default implementation does nothing if not supported
+    p.setString(index, null);
   }
 
   @Override

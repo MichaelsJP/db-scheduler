@@ -11,5 +11,6 @@ create table if not exists scheduled_tasks (
 	last_heartbeat TIMESTAMP WITH TIME ZONE,
 	version BIGINT,
 	priority INT,
+	tags text,
 	PRIMARY KEY (task_name, task_instance)
 );
