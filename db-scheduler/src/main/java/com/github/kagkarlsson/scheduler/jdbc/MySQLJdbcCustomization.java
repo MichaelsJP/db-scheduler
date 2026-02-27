@@ -32,4 +32,9 @@ public class MySQLJdbcCustomization extends DefaultJdbcCustomization {
   public String getQueryLimitPart(int limit) {
     return Queries.postgresSqlLimitPart(limit);
   }
+
+  @Override
+  public String createSelectTagsQuery(String tableName) {
+    return super.createSelectTagsQuery(tableName);
+  }
 }

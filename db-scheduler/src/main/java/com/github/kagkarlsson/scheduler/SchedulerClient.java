@@ -228,6 +228,8 @@ public interface SchedulerClient {
    */
   void cancel(TaskInstanceId taskInstanceId);
 
+  List<String> getTags();
+
   /**
    * Gets all scheduled executions and supplies them to the provided Consumer. A Consumer is used to
    * avoid forcing the SchedulerClient to load all executions in memory. Currently running
@@ -611,6 +613,11 @@ public interface SchedulerClient {
       } else {
         throw new TaskInstanceNotFoundException(taskName, instanceId);
       }
+    }
+
+    @Override
+    public List<String> getTags() {
+      return taskRepository.getTags();
     }
 
     @Override

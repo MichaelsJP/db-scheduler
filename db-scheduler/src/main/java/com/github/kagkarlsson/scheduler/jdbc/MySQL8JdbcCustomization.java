@@ -52,4 +52,9 @@ public class MySQL8JdbcCustomization extends DefaultJdbcCustomization {
         null,
         " FOR UPDATE SKIP LOCKED ");
   }
+
+  @Override
+  public String createSelectTagsQuery(String tableName) {
+    return super.createSelectTagsQuery(tableName);
+  }
 }

@@ -132,4 +132,12 @@ public class DefaultJdbcCustomization implements JdbcCustomization {
   public String getName() {
     return "Default";
   }
+
+  @Override
+  public String createSelectTagsQuery(String tableName) {
+    // This is problematic if we don't have a standardized way to store/retrieve tags across all
+    // DBs.
+    // For now, return a query that will likely fail or return nothing if not overridden.
+    return "SELECT tags FROM " + tableName + " WHERE 1=0";
+  }
 }

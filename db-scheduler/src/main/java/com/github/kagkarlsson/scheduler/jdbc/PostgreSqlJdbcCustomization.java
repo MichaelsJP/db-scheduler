@@ -123,4 +123,9 @@ public class PostgreSqlJdbcCustomization extends DefaultJdbcCustomization {
     String[] tags = (String[]) array.getArray();
     return java.util.Arrays.asList(tags);
   }
+
+  @Override
+  public String createSelectTagsQuery(String tableName) {
+    return "SELECT DISTINCT unnest(tags) FROM " + tableName;
+  }
 }

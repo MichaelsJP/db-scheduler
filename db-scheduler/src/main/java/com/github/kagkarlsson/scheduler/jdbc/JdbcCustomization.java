@@ -52,4 +52,6 @@ public interface JdbcCustomization {
 
   String createSelectDueQuery(
       String tableName, int limit, String andCondition, boolean orderByPriority);
+
+  String createSelectTagsQuery(String tableName);
 }

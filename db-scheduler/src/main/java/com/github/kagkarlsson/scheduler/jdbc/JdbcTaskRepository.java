@@ -751,6 +751,26 @@ public class JdbcTaskRepository implements TaskRepository {
   }
 
   @Override
+  public List<String> getTags() {
+    return jdbcRunner.query(
+        jdbcCustomization.createSelectTagsQuery(tableName),
+        com.github.kagkarlsson.jdbc.PreparedStatementSetter.NOOP,
+        new com.github.kagkarlsson.jdbc.ResultSetMapper<List<String>>() {
+          @Override
+          public List<String> map(ResultSet rs) throws SQLException {
+            List<String> tags = new ArrayList<>();
+            while (rs.next()) {
+              String tag = rs.getString(1);
+              if (tag != null) {
+                tags.add(tag);
+              }
+            }
+            return tags;
+          }
+        });
+  }
+
+  @Override
   public void verifySupportsLockAndFetch() {
     if (!(jdbcCustomization.supportsSingleStatementLockAndFetch()
         || jdbcCustomization.supportsGenericLockAndFetch())) {

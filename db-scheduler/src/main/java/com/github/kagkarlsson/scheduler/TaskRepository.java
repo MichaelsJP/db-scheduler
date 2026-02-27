@@ -101,5 +101,7 @@ public interface TaskRepository {
 
   int removeExecutions(String taskName);
 
+  List<String> getTags();
+
   void verifySupportsLockAndFetch();
 }

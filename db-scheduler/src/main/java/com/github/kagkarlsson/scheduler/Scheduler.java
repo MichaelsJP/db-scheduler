@@ -316,6 +316,11 @@ public class Scheduler implements SchedulerClient {
   }
 
   @Override
+  public List<String> getTags() {
+    return this.delegate.getTags();
+  }
+
+  @Override
   public void fetchScheduledExecutions(Consumer<ScheduledExecution<Object>> consumer) {
     this.delegate.fetchScheduledExecutions(consumer);
   }

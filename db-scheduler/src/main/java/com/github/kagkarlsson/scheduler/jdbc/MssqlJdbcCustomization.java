@@ -71,4 +71,9 @@ public class MssqlJdbcCustomization extends DefaultJdbcCustomization {
         " WITH (READPAST,ROWLOCK) ",
         null);
   }
+
+  @Override
+  public String createSelectTagsQuery(String tableName) {
+    return super.createSelectTagsQuery(tableName);
+  }
 }

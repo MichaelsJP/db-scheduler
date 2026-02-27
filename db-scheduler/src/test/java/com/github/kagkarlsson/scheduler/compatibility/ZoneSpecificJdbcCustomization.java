@@ -96,4 +96,9 @@ public class ZoneSpecificJdbcCustomization implements JdbcCustomization {
       String tableName, int limit, String andCondition, boolean orderByPriority) {
     return delegate.createSelectDueQuery(tableName, limit, andCondition, orderByPriority);
   }
+
+  @Override
+  public String createSelectTagsQuery(String tableName) {
+    return delegate.createSelectTagsQuery(tableName);
+  }
 }

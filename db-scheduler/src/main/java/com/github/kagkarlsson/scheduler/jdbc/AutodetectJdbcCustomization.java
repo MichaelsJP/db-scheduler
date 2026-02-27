@@ -158,14 +158,19 @@ public class AutodetectJdbcCustomization implements JdbcCustomization {
         tableName, limit, requiredAndCondition, orderByPriority);
   }
 
-  @Override
-  public String createSelectDueQuery(
-      String tableName, int limit, String andCondition, boolean orderByPriority) {
-    return jdbcCustomization.createSelectDueQuery(tableName, limit, andCondition, orderByPriority);
-  }
-
-  @Override
-  public String getName() {
+    @Override
+    public String createSelectDueQuery(String tableName, int limit, String andCondition, boolean orderByPriority) {
+      return jdbcCustomization.createSelectDueQuery(tableName, limit, andCondition, orderByPriority);
+    }
+  
+    @Override
+    public String createSelectTagsQuery(String tableName) {
+      return jdbcCustomization.createSelectTagsQuery(tableName);
+    }
+  
+    @Override
+    public String getName() {
+  
     return jdbcCustomization.getName();
   }
 

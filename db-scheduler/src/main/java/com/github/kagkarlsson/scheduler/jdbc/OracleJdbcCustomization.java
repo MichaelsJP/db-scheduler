@@ -44,4 +44,9 @@ public class OracleJdbcCustomization extends DefaultJdbcCustomization {
         null,
         null);
   }
+
+  @Override
+  public String createSelectTagsQuery(String tableName) {
+    return super.createSelectTagsQuery(tableName);
+  }
 }
