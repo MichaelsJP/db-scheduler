@@ -294,6 +294,11 @@ public class Scheduler implements SchedulerClient {
   }
 
   @Override
+  public boolean updateTags(TaskInstanceId taskInstanceId, List<String> tags) {
+    return this.delegate.updateTags(taskInstanceId, tags);
+  }
+
+  @Override
   public <T> boolean schedule(
       TaskInstance<T> taskInstance, Instant executionTime, ScheduleOptions scheduleOptions) {
     return this.delegate.schedule(taskInstance, executionTime, scheduleOptions);
@@ -347,6 +352,10 @@ public class Scheduler implements SchedulerClient {
 
   public void triggerCheckForDueExecutions() {
     executeDueWaiter.wakeOrSkipNextWait();
+  }
+
+  public int getThreadpoolSize() {
+    return threadpoolSize;
   }
 
   public List<CurrentlyExecuting> getCurrentlyExecuting() {

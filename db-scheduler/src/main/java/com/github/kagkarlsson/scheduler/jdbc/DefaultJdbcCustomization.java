@@ -73,6 +73,16 @@ public class DefaultJdbcCustomization implements JdbcCustomization {
   }
 
   @Override
+  public void setTags(PreparedStatement p, int index, List<String> tags) throws SQLException {
+    // Default implementation does nothing if not supported
+  }
+
+  @Override
+  public List<String> getTags(ResultSet rs, String columnName) throws SQLException {
+    return java.util.Collections.emptyList();
+  }
+
+  @Override
   public boolean supportsExplicitQueryLimitPart() {
     return true;
   }

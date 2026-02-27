@@ -89,6 +89,8 @@ public interface TaskRepository {
 
   boolean updateHeartbeat(Execution execution, Instant heartbeatTime);
 
+  boolean updateTags(Execution execution, List<String> tags);
+
   List<Execution> getExecutionsFailingLongerThan(Duration interval);
 
   Optional<Execution> getExecution(String taskName, String taskInstanceId);

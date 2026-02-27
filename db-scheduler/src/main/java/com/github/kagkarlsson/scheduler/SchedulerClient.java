@@ -206,6 +206,18 @@ public interface SchedulerClient {
   <T> boolean reschedule(SchedulableInstance<T> schedulableInstance);
 
   /**
+   * Update the tags for an existing execution. If the execution does not exist or if it is
+   * currently running, an exception is thrown.
+   *
+   * @param taskInstanceId Task-instance to update tags for, expected to exist
+   * @param tags the new tags
+   * @return true if updated successfully
+   * @throws TaskInstanceNotFoundException if the given instance does not exist
+   * @throws TaskInstanceCurrentlyExecutingException if the execution is currently running
+   */
+  boolean updateTags(TaskInstanceId taskInstanceId, List<String> tags);
+
+  /**
    * Removes/Cancels an execution.
    *
    * @param taskInstanceId
@@ -567,6 +579,22 @@ public interface SchedulerClient {
         LOG.warn("Failed to reschedule task instance: {}", taskInstanceId);
       }
       return success;
+    }
+
+    @Override
+    public boolean updateTags(TaskInstanceId taskInstanceId, List<String> tags) {
+      String taskName = taskInstanceId.getTaskName();
+      String instanceId = taskInstanceId.getId();
+      Execution execution =
+          taskRepository
+              .getExecution(taskName, instanceId)
+              .orElseThrow(() -> new TaskInstanceNotFoundException(taskName, instanceId));
+
+      if (execution.isPicked()) {
+        throw new TaskInstanceCurrentlyExecutingException(taskName, instanceId);
+      }
+
+      return taskRepository.updateTags(execution, tags);
     }
 
     @Override

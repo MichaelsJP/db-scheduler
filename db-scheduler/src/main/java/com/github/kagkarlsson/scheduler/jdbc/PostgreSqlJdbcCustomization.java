@@ -102,4 +102,25 @@ public class PostgreSqlJdbcCustomization extends DefaultJdbcCustomization {
         },
         ctx.resultSetMapper.get());
   }
+
+  @Override
+  public void setTags(java.sql.PreparedStatement p, int index, java.util.List<String> tags)
+      throws java.sql.SQLException {
+    if (tags == null || tags.isEmpty()) {
+      p.setArray(index, p.getConnection().createArrayOf("text", new Object[] {}));
+    } else {
+      p.setArray(index, p.getConnection().createArrayOf("text", tags.toArray()));
+    }
+  }
+
+  @Override
+  public java.util.List<String> getTags(java.sql.ResultSet rs, String columnName)
+      throws java.sql.SQLException {
+    java.sql.Array array = rs.getArray(columnName);
+    if (array == null) {
+      return java.util.Collections.emptyList();
+    }
+    String[] tags = (String[]) array.getArray();
+    return java.util.Arrays.asList(tags);
+  }
 }

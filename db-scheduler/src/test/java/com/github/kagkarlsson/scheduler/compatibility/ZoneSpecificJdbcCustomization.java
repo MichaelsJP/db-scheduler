@@ -49,6 +49,16 @@ public class ZoneSpecificJdbcCustomization implements JdbcCustomization {
   }
 
   @Override
+  public void setTags(PreparedStatement p, int index, List<String> tags) throws SQLException {
+    delegate.setTags(p, index, tags);
+  }
+
+  @Override
+  public List<String> getTags(ResultSet rs, String columnName) throws SQLException {
+    return delegate.getTags(rs, columnName);
+  }
+
+  @Override
   public boolean supportsExplicitQueryLimitPart() {
     return delegate.supportsExplicitQueryLimitPart();
   }

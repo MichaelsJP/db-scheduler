@@ -208,6 +208,7 @@ public class JdbcTaskRepository implements TaskRepository {
     jdbcCustomization.setInstant(ps, index++, value.getExecutionTime());
     ps.setBoolean(index++, false);
     ps.setLong(index++, 1L);
+    jdbcCustomization.setTags(ps, index++, taskInstance.getTags());
     if (orderByPriority) {
       ps.setInt(index, taskInstance.getPriority());
     }
@@ -218,9 +219,9 @@ public class JdbcTaskRepository implements TaskRepository {
     //           with execute(query-and-pss) and have builder return that..
     return "insert into "
         + tableName
-        + "(task_name, task_instance, task_data, execution_time, picked, version"
+        + "(task_name, task_instance, task_data, execution_time, picked, version, tags"
         + (orderByPriority ? ", priority" : "")
-        + ") values(?, ?, ?, ?, ?, ? "
+        + ") values(?, ?, ?, ?, ?, ?, ? "
         + (orderByPriority ? ", ?" : "")
         + ")";
   }
@@ -260,6 +261,7 @@ public class JdbcTaskRepository implements TaskRepository {
                 + "consecutive_failures = ?, "
                 + "execution_time = ?, "
                 + "task_data = ?, "
+                + "tags = ?, "
                 + "version = 1 "
                 + "where task_name = ? "
                 + "and task_instance = ? "
@@ -278,6 +280,7 @@ public class JdbcTaskRepository implements TaskRepository {
               // may cause datbase-specific problems, might have to use setNull instead
               jdbcCustomization.setTaskData(
                   ps, index++, serializer.serialize(newData)); // task_data
+              jdbcCustomization.setTags(ps, index++, newExecution.taskInstance.getTags()); // tags
               ps.setString(index++, toBeReplaced.taskInstance.getTaskName()); // task_name
               ps.setString(index++, toBeReplaced.taskInstance.getId()); // task_instance
               ps.setLong(index, toBeReplaced.version); // version
@@ -522,6 +525,7 @@ public class JdbcTaskRepository implements TaskRepository {
                 + "consecutive_failures = ?, "
                 + "execution_time = ?, "
                 + (newData != null ? "task_data = ?, " : "")
+                + "tags = ?, "
                 + "version = version + 1 "
                 + "where task_name = ? "
                 + "and task_instance = ? "
@@ -540,6 +544,7 @@ public class JdbcTaskRepository implements TaskRepository {
                 // FIXLATER: optionally support bypassing serializer if byte[] already
                 jdbcCustomization.setTaskData(ps, index++, serializer.serialize(newData.data));
               }
+              jdbcCustomization.setTags(ps, index++, execution.taskInstance.getTags());
               ps.setString(index++, execution.taskInstance.getTaskName());
               ps.setString(index++, execution.taskInstance.getId());
               ps.setLong(index, execution.version);
@@ -664,6 +669,35 @@ public class JdbcTaskRepository implements TaskRepository {
         return true;
       }
       LOG.debug("Updated heartbeat for execution: {}", e);
+      return true;
+    }
+  }
+
+  @Override
+  public boolean updateTags(Execution e, List<String> tags) {
+    final int updated =
+        jdbcRunner.execute(
+            "update "
+                + tableName
+                + " set tags = ? "
+                + "where task_name = ? "
+                + "and task_instance = ? "
+                + "and version = ?",
+            ps -> {
+              jdbcCustomization.setTags(ps, 1, tags);
+              ps.setString(2, e.taskInstance.getTaskName());
+              ps.setString(3, e.taskInstance.getId());
+              ps.setLong(4, e.version);
+            });
+
+    if (updated == 0) {
+      return false;
+    } else {
+      if (updated > 1) {
+        LOG.error(
+            "Updated multiple rows updating tags for execution. Should never happen since name and id is primary key. Execution: {}",
+            e);
+      }
       return true;
     }
   }
@@ -828,6 +862,7 @@ public class JdbcTaskRepository implements TaskRepository {
         // default
         Instant lastHeartbeat = jdbcCustomization.getInstant(rs, "last_heartbeat");
         long version = rs.getLong("version");
+        java.util.List<String> tags = jdbcCustomization.getTags(rs, "tags");
 
         int priority = orderByPriority ? rs.getInt("priority") : 0;
 
@@ -844,7 +879,7 @@ public class JdbcTaskRepository implements TaskRepository {
         this.consumer.accept(
             new Execution(
                 executionTime,
-                new TaskInstance(taskName, instanceId, dataSupplier, priority),
+                new TaskInstance(taskName, instanceId, dataSupplier, priority, tags),
                 picked,
                 pickedBy,
                 lastSuccess,

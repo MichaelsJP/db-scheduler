@@ -32,6 +32,10 @@ public interface JdbcCustomization {
 
   byte[] getTaskData(ResultSet rs, String columnName) throws SQLException;
 
+  void setTags(PreparedStatement p, int index, java.util.List<String> tags) throws SQLException;
+
+  java.util.List<String> getTags(ResultSet rs, String columnName) throws SQLException;
+
   boolean supportsExplicitQueryLimitPart();
 
   String getQueryLimitPart(int limit);

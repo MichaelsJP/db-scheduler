@@ -81,6 +81,10 @@ public class ScheduledExecution<DATA_TYPE> {
     return execution.pickedBy;
   }
 
+  public java.util.List<String> getTags() {
+    return execution.taskInstance.getTags();
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

@@ -24,20 +24,27 @@ public class TaskInstance<T> implements TaskInstanceId {
   private final String id;
   private final Supplier<T> dataSupplier;
   private final int priority;
+  private final java.util.List<String> tags;
 
   public TaskInstance(String taskName, String id) {
     this(taskName, id, (T) null);
   }
 
   public TaskInstance(String taskName, String id, T data) {
-    this(taskName, id, () -> data, Priority.MEDIUM);
+    this(taskName, id, () -> data, Priority.MEDIUM, java.util.Collections.emptyList());
   }
 
   public TaskInstance(String taskName, String id, Supplier<T> dataSupplier, int priority) {
+    this(taskName, id, dataSupplier, priority, java.util.Collections.emptyList());
+  }
+
+  public TaskInstance(
+      String taskName, String id, Supplier<T> dataSupplier, int priority, java.util.List<String> tags) {
     this.taskName = taskName;
     this.id = id;
     this.dataSupplier = dataSupplier;
     this.priority = priority;
+    this.tags = tags;
   }
 
   public String getTaskAndInstance() {
@@ -61,6 +68,10 @@ public class TaskInstance<T> implements TaskInstanceId {
     return priority;
   }
 
+  public java.util.List<String> getTags() {
+    return tags;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -68,17 +79,26 @@ public class TaskInstance<T> implements TaskInstanceId {
     TaskInstance<?> that = (TaskInstance<?>) o;
     return priority == that.priority
         && Objects.equals(taskName, that.taskName)
-        && Objects.equals(id, that.id);
+        && Objects.equals(id, that.id)
+        && Objects.equals(tags, that.tags);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(taskName, id, priority);
+    return Objects.hash(taskName, id, priority, tags);
   }
 
   @Override
   public String toString() {
-    return "TaskInstance: " + "task=" + taskName + ", id=" + id + ", priority=" + priority;
+    return "TaskInstance: "
+        + "task="
+        + taskName
+        + ", id="
+        + id
+        + ", priority="
+        + priority
+        + ", tags="
+        + tags;
   }
 
   public static class Builder<T> {
@@ -87,6 +107,7 @@ public class TaskInstance<T> implements TaskInstanceId {
     private final String id;
     private Supplier<T> dataSupplier = () -> (T) null;
     private int priority = Priority.MEDIUM;
+    private java.util.List<String> tags = java.util.Collections.emptyList();
 
     public Builder(String taskName, String id) {
       this.id = id;
@@ -109,17 +130,22 @@ public class TaskInstance<T> implements TaskInstanceId {
       return this;
     }
 
+    public Builder<T> tags(java.util.List<String> tags) {
+      this.tags = tags;
+      return this;
+    }
+
     public TaskInstance<T> build() {
-      return new TaskInstance<>(taskName, id, dataSupplier, priority);
+      return new TaskInstance<>(taskName, id, dataSupplier, priority, tags);
     }
 
     public SchedulableInstance<T> scheduledTo(Instant executionTime) {
-      TaskInstance<T> taskInstance = new TaskInstance<>(taskName, id, dataSupplier, priority);
+      TaskInstance<T> taskInstance = new TaskInstance<>(taskName, id, dataSupplier, priority, tags);
       return new SchedulableTaskInstance<>(taskInstance, executionTime);
     }
 
     public SchedulableInstance<T> scheduledAccordingToData() {
-      TaskInstance<T> taskInstance = new TaskInstance<>(taskName, id, dataSupplier, priority);
+      TaskInstance<T> taskInstance = new TaskInstance<>(taskName, id, dataSupplier, priority, tags);
       T data = dataSupplier.get();
       if (!(data instanceof ScheduleAndData)) {
         throw new RuntimeException(
